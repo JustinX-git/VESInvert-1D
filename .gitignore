@@ -1,0 +1,5 @@
+# dependencies
+/node_modules
+
+# inversion test data
+/data.txt

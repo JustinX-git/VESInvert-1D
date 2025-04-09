@@ -1,0 +1,1 @@
+This is an open source project that provides users with a nice GUI for carrying out 1D VES inversions. The software accomplishes this by incorporating the Levenberg-Marquadt inversion scheme and the Nyman-Landistman filter coefficients for the forward modeling. Currently only the Schlumberger array configuration is supported.
