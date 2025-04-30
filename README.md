@@ -55,6 +55,16 @@ Vertical Electrical Sounding is a geophysical method used to infer subsurface re
 
 ---
 
+## 🚀 Getting Started
+
+Coming soon. For now, clone the repo and run using:
+
+```bash
+npm install
+npm start
+
+---
+
 ## 📌 Roadmap
 
 - Allow data imports from Excel and DAT files 
