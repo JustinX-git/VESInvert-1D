@@ -78,9 +78,9 @@ npm start
 ## 🛠️ Built With
 
 - [Electron.js](https://www.electronjs.org/)
+- [Math.js](https://mathjs.org/)
+- [D3.js](https://d3js.org/)
 - Custom 1D inversion engine using Levenberg-Marquardt
-- Math.js
-- D3.js
 
 ---
 
