@@ -4,7 +4,7 @@ A desktop application for performing **1D Vertical Electrical Sounding (VES)** i
 
 ---
 
-## ✨ Features
+## Features
 
 - Interactive GUI for entering AB/2 distances and resistivity values.
 - Supports branch-based data entry for comparative analysis.
@@ -37,7 +37,7 @@ It also shows the final root-mean-square error (RMSE), which quantifies the diff
 
 ---
 
-### 🧠 Model Parameters
+### Model Parameters
 
 After a successful inversion, the software presents the predicted resistivity and thickness of each subsurface layer.  
 
@@ -47,7 +47,7 @@ After a successful inversion, the software presents the predicted resistivity an
 
 ---
 
-## 🧠 About
+## About
 
 Vertical Electrical Sounding is a geophysical method used to infer subsurface resistivity profiles. This software provides a convenient desktop-based interface for interpreting such data via 1D inversion techniques. While the results are theoretical approximations, they offer valuable insights for further geophysical or geological investigations.
 
