@@ -20,7 +20,6 @@ A desktop application for performing **1D Vertical Electrical Sounding (VES)** i
 ### 🧾 Data Entry Interface
 
 Users enter data in branches for multiple measurements. The values are organized as AB/2 distances (current electrode spacing) and the corresponding measured resistivity.  
-This feature allows both clarity and flexibility during input.
 
 ![image](https://github.com/user-attachments/assets/3d803fc8-0e7e-4738-91b4-cbb700a9f443)
 
