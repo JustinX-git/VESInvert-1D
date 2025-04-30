@@ -63,7 +63,7 @@ Coming soon. For now, clone the repo and run using:
 npm install
 npm start
 
----
+```
 
 ## 📌 Roadmap
 
