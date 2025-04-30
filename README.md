@@ -32,8 +32,8 @@ This feature allows both clarity and flexibility during input.
 The program calculates a theoretical model curve using the entered data and plots it (in red) alongside the field data (black dots).
 It also shows the final root-mean-square error (RMSE), which quantifies the difference between the observed and calculated data
 
-![Inversion Plot Screenshot](![image](https://github.com/user-attachments/assets/40b9c9d0-c4e5-4e46-8365-06f218167136)
-)
+[image](https://github.com/user-attachments/assets/40b9c9d0-c4e5-4e46-8365-06f218167136)
+
 
 ---
 
@@ -42,8 +42,8 @@ It also shows the final root-mean-square error (RMSE), which quantifies the diff
 After a successful inversion, the software presents the predicted resistivity and thickness of each subsurface layer.  
 
 
-![Model Parameters Screenshot](![image](https://github.com/user-attachments/assets/b3867c8d-b3f8-4f20-ac49-f469643fcd53)
-)
+![image](https://github.com/user-attachments/assets/b3867c8d-b3f8-4f20-ac49-f469643fcd53)
+
 
 ---
 
@@ -51,7 +51,7 @@ After a successful inversion, the software presents the predicted resistivity an
 
 Vertical Electrical Sounding is a geophysical method used to infer subsurface resistivity profiles. This software provides a convenient desktop-based interface for interpreting such data via 1D inversion techniques. While the results are theoretical approximations, they offer valuable insights for further geophysical or geological investigations.
 
-> 🔍 *Currently, only Windows is supported and only the Schlumberger configuration is implemented.*
+>  *Currently, only Windows is supported and only the Schlumberger configuration is implemented.*
 
 ---
 
