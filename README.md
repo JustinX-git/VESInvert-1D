@@ -22,8 +22,8 @@ A desktop application for performing **1D Vertical Electrical Sounding (VES)** i
 Users enter data in branches for multiple measurements. The values are organized as AB/2 distances (current electrode spacing) and the corresponding measured resistivity.  
 This feature allows both clarity and flexibility during input.
 
-![Data Entry Screenshot](![image](https://github.com/user-attachments/assets/3d803fc8-0e7e-4738-91b4-cbb700a9f443)
-)
+![image](https://github.com/user-attachments/assets/3d803fc8-0e7e-4738-91b4-cbb700a9f443)
+
 
 ---
 
@@ -32,7 +32,7 @@ This feature allows both clarity and flexibility during input.
 The program calculates a theoretical model curve using the entered data and plots it (in red) alongside the field data (black dots).
 It also shows the final root-mean-square error (RMSE), which quantifies the difference between the observed and calculated data
 
-[image](https://github.com/user-attachments/assets/40b9c9d0-c4e5-4e46-8365-06f218167136)
+![image](https://github.com/user-attachments/assets/40b9c9d0-c4e5-4e46-8365-06f218167136)
 
 
 ---
