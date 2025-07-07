@@ -15,9 +15,9 @@ A desktop application for performing **1D Vertical Electrical Sounding (VES)** i
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
-### 🧾 Data Entry Interface
+### Data Entry Interface
 
 Users enter data in branches for multiple measurements. The values are organized as AB/2 distances (current electrode spacing) and the corresponding measured resistivity.  
 
@@ -26,7 +26,7 @@ Users enter data in branches for multiple measurements. The values are organized
 
 ---
 
-### 📈 Inversion Plot
+### Inversion Plot
 
 The program calculates a theoretical model curve using the entered data and plots it (in red) alongside the field data (black dots).
 It also shows the final root-mean-square error (RMSE), which quantifies the difference between the observed and calculated data
@@ -64,7 +64,7 @@ npm start
 
 ```
 
-## 📌 Roadmap
+## Roadmap
 
 - Allow data imports from Excel and DAT files 
 - Add support for Wenner and Dipole-Dipole arrays 
@@ -74,7 +74,7 @@ npm start
 
 ---
 
-## 🛠️ Built With
+## Built With
 
 - [Electron.js](https://www.electronjs.org/)
 - [Math.js](https://mathjs.org/)
@@ -83,7 +83,7 @@ npm start
 
 ---
 
-## 📄 License
+## License
 
 MIT — free for educational and research use.
 
