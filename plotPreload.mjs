@@ -75,38 +75,7 @@ ipcRenderer.on('plot', (ev, measuredDataPoints)=>{
     });
 
     contextBridge.exposeInMainWorld('D3',{
-        logXScaleSetUp: (measuredData,margin,width) => d3.scaleLog([1, d3.max(measuredData, d => d.x )],[margin.left, width - margin.right]),
-        logYScaleSetUp: (measuredData,margin,height) => d3.scaleLog([1, d3.max(measuredData, d => d.y)],[height - margin.bottom, margin.top]),
-        lineSetUp: (x,y) => d3.line(x,y).curve(d3.curveNatural),
-        svgDraw: (measuredData, linemeasuredData,height,margin,xScale,yScale) => {
-            const svg = d3.select("svg");
-            const path = svg.append("path")
-           .datum(measuredData)
-           .attr("d", linemeasuredData)
-           .attr("fill", "none")
-           .attr("stroke", "steelblue")
-           .attr("stroke-width", 2);
-           
-           const totalLength = path.node().getTotalLength();
-           path
-           .attr("stroke-dasharray", totalLength)
-           .attr("stroke-dashoffset", totalLength)
-           .transition()
-           .duration(3000) 
-           .ease(d3.easeLinear)
-           .attr("stroke-dashoffset", 0);
-
-          // Add x-axis (logarithmic)
-           svg.append("g")
-          .attr("transform", `translate(0, ${height - margin.bottom})`)
-          .call(d3.axisBottom(xScale).ticks(10,  ",.1s"));
-
-          // Add y-axis (logarithmic)
-          svg.append("g")
-          .attr("transform", `translate(${margin.left},0)`)
-          .call(d3.axisLeft(yScale).ticks(10,  ",.1s"));
-        },
-        freeStyle: (width,height,measuredData,modeledData) =>{
+        plot: (width,height,measuredData,modeledData) =>{
             const x = d3.scaleLog([1,  d3.max(measuredData, d => d.x )], [20, width - 30]);
             const y = d3.scaleLog([d3.min(measuredData, d => d.y), d3.max(measuredData, d => d.y) + 50], [height - 21,10]);
             const svg = d3.select("svg");
