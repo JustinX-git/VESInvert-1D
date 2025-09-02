@@ -31,9 +31,9 @@ const initialModel = [
 
     //M Heriyanto and W Srigutomo Synthetic Data (1)
  //True model
-  {resistivity:108,thickness: 5, depth: 5},
-  {resistivity: 52, thickness: 20, depth: 25},
-  {resistivity:11,thickness: Infinity, depth: null}
+  // {resistivity:108,thickness: 5, depth: 5},
+  // {resistivity: 52, thickness: 20, depth: 25},
+  // {resistivity:11,thickness: Infinity, depth: null}
 
     //M Heriyanto and W Srigutomo Synthetic Data (2)
  //True model
@@ -66,9 +66,10 @@ const initialModel = [
   // {resistivity: 7500, thickness: Infinity, depth: null}
 
 //Ekinci & Dermici synthetic three layer model (1)
-  // {resistivity:100,thickness: 5, depth: 5},
-  // {resistivity: 50, thickness: 5, depth: 10},
-  // {resistivity:20,thickness: Infinity, depth: null}
+  {resistivity:100,thickness: 5, depth: 5},
+  {resistivity: 200, thickness: 5, depth: 10},
+  {resistivity: 110, thickness: 5, depth: 10},
+  {resistivity:100,thickness: Infinity, depth: null}
 
 //Ekinci & Dermici synthetic three layer model (2)
 // {resistivity: 50, thickness: 5, depth: 5},
@@ -102,8 +103,8 @@ const modelParamsNo = initialModel.length
 // SAMPLE DATA
   // <----- SYNTHETIC DATA SETS ----->
 //M Heriyanto and W Srigutomo Synthetic Data (1)
-const distances = [1,2,3,5,7,10,15,20,25,30,40,50,60,80,100,120,150,200,250,300];
-const resistivities = [109.78,100.05,111.02,107.46,96.9,86.45,71.15,58.49,53.84,45.06,39.05,28.44,23.92,16.51,13.48,13.31,12.08,10.94,11.72,10.23];
+// const distances = [1,2,3,5,7,10,15,20,25,30,40,50,60,80,100,120,150,200,250,300];
+// const resistivities = [109.78,100.05,111.02,107.46,96.9,86.45,71.15,58.49,53.84,45.06,39.05,28.44,23.92,16.51,13.48,13.31,12.08,10.94,11.72,10.23];
 
 //M Heriyanto and W Srigutomo Synthetic Data (2)
 // const distances = [1,2,3,5,7,10,15,20,25,30,40,50,60,80,100,120,150,200,250,300];
@@ -133,6 +134,10 @@ const resistivities = [109.78,100.05,111.02,107.46,96.9,86.45,71.15,58.49,53.84,
 //Ekinci & Dermici synthetic three layer model data (3)
 // const distances = [1, 2, 3, 5, 7, 10, 15, 20, 25, 30, 40, 50, 60, 80, 100, 120, 150, 200, 250, 300];
 //  const resistivities = [104.95, 94.54, 93.52, 98.78, 91.86, 72.60, 57.84, 52.40, 39.82, 37.62, 26.02, 21.01, 19.65, 15.58, 12.25, 12.44, 10.51, 10.01,10.84, 10.73];
+
+//Arthour's synthetic model (1)
+const distances = [1, 2, 3, 5, 7, 10, 15, 20, 25, 30, 40, 50, 60, 80, 100, 120, 150, 200, 250, 300];
+ const resistivities = [54.95, 94.54, 103.52, 154.78, 101.86, 91.60, 123.84, 212.40, 136.82, 154.62, 200.02, 160.01, 100.65, 105.58, 112.25, 121.44, 121.51, 130.01,135.84, 136.73];
 
 const resistivitiesVect = resistivities.map(resistivity => [resistivity]);
 
@@ -383,151 +388,151 @@ const evalForwardDiffJacobian = (logModel, modelResponseVect) => {
 
 console.time('LM Scheme - Log Domain');
 
-while(iterationCount < ITERATION_LIMIT) {  
-  if(nullMetricArr.length > 2) break;
+// while(iterationCount < ITERATION_LIMIT) {  
+//   if(nullMetricArr.length > 2) break;
   
-  const previousModel = [...currentIterationModel];  
-  const previousModelParamsVect = Array((2 * modelParamsNo) - 1);  
+//   const previousModel = [...currentIterationModel];  
+//   const previousModelParamsVect = Array((2 * modelParamsNo) - 1);  
   
-  // Forward model using log domain model but getting linear responses
-  const previousModelResponseVect = logDomainForwardOperator(previousModel);
+//   // Forward model using log domain model but getting linear responses
+//   const previousModelResponseVect = logDomainForwardOperator(previousModel);
   
-  // Calculate residuals using linear domain responses
-  const residualVect = resistGraph.differenceHandler(logResistivitiesVect, previousModelResponseVect);
-  const χ = evalChiSquaredError(residualVect);
+//   // Calculate residuals using linear domain responses
+//   const residualVect = resistGraph.differenceHandler(logResistivitiesVect, previousModelResponseVect);
+//   const χ = evalChiSquaredError(residualVect);
   
-  let jacobian = [], jacobianTranspose = [], dampingCoefficient = 0;
+//   let jacobian = [], jacobianTranspose = [], dampingCoefficient = 0;
 
-  // Fill parameter vector for Jacobian calculation
-  for(let i = 0; i < previousModel.length; ++i) {
-    previousModelParamsVect[i] = [previousModel[i].logResistivity]; 
-    previousModelParamsVect[i + modelParamsNo] = [previousModel[i].thickness];
-  }
+//   // Fill parameter vector for Jacobian calculation
+//   for(let i = 0; i < previousModel.length; ++i) {
+//     previousModelParamsVect[i] = [previousModel[i].logResistivity]; 
+//     previousModelParamsVect[i + modelParamsNo] = [previousModel[i].thickness];
+//   }
 
-  jacobian = evalForwardDiffJacobian(previousModel, previousModelResponseVect);
-  jacobianTranspose = resistGraph.getTranspose(jacobian);
+//   jacobian = evalForwardDiffJacobian(previousModel, previousModelResponseVect);
+//   jacobianTranspose = resistGraph.getTranspose(jacobian);
 
-  const hessian = resistGraph.productHandler(jacobianTranspose, jacobian);
-  const hessianDiag = resistGraph.createDiagonalMatrix(hessian);
-  const gFactor = resistGraph.productHandler(jacobianTranspose, residualVect);
-  const iterationMaxError = resistGraph.getMaxElem(gFactor);
+//   const hessian = resistGraph.productHandler(jacobianTranspose, jacobian);
+//   const hessianDiag = resistGraph.createDiagonalMatrix(hessian);
+//   const gFactor = resistGraph.productHandler(jacobianTranspose, residualVect);
+//   const iterationMaxError = resistGraph.getMaxElem(gFactor);
 
-  if(iterationCount === 0) {
-    dampingCoefficient = 1e-6 * resistGraph.getMaxElem(hessianDiag);
-  } else {
-    dampingCoefficient = nextDampingCoefficient;
-  }
+//   if(iterationCount === 0) {
+//     dampingCoefficient = 1e-6 * resistGraph.getMaxElem(hessianDiag);
+//   } else {
+//     dampingCoefficient = nextDampingCoefficient;
+//   }
 
-  if(!isFinite(dampingCoefficient)) break;
+//   if(!isFinite(dampingCoefficient)) break;
 
-  const pertubationVectNumerator = gFactor;
-  const pertubationVectDenominator = resistGraph.getInverse(
-    resistGraph.sumHandler(
-      hessian, 
-      resistGraph.productHandler(
-        dampingCoefficient, 
-        resistGraph.createIdentityMatrix((2 * modelParamsNo) - 1)[['_data']]
-      )
-    )
-  );
+//   const pertubationVectNumerator = gFactor;
+//   const pertubationVectDenominator = resistGraph.getInverse(
+//     resistGraph.sumHandler(
+//       hessian, 
+//       resistGraph.productHandler(
+//         dampingCoefficient, 
+//         resistGraph.createIdentityMatrix((2 * modelParamsNo) - 1)[['_data']]
+//       )
+//     )
+//   );
 
-  const pertubationVect = resistGraph.productHandler(pertubationVectDenominator, pertubationVectNumerator);
+//   const pertubationVect = resistGraph.productHandler(pertubationVectDenominator, pertubationVectNumerator);
   
-  // Update model parameters in log domain
-  currentIterationModel = currentIterationModel.map((layer, index, array) => {
-    const prevLayer = array[index - 1];
+//   // Update model parameters in log domain
+//   currentIterationModel = currentIterationModel.map((layer, index, array) => {
+//     const prevLayer = array[index - 1];
     
-    // Direct update of log-resistivity (no need to check for negative values)
-    const logResistivityUpdate = layer.logResistivity + pertubationVect[index][0];
+//     // Direct update of log-resistivity (no need to check for negative values)
+//     const logResistivityUpdate = layer.logResistivity + pertubationVect[index][0];
     
-    // For thickness, still need to ensure positive values
-    const Δthickness = layer.thickness + (
-      pertubationVect[index + modelParamsNo] === undefined ? 
-        0 : 
-        pertubationVect[index + modelParamsNo][0]
-    );
-    const thicknessUpdate = Δthickness > 0 ? Δthickness : layer.thickness;
+//     // For thickness, still need to ensure positive values
+//     const Δthickness = layer.thickness + (
+//       pertubationVect[index + modelParamsNo] === undefined ? 
+//         0 : 
+//         pertubationVect[index + modelParamsNo][0]
+//     );
+//     const thicknessUpdate = Δthickness > 0 ? Δthickness : layer.thickness;
     
-    return {
-      logResistivity: logResistivityUpdate,
-      thickness: thicknessUpdate,
-      depth: prevLayer ? (thicknessUpdate + prevLayer.depth) : thicknessUpdate
-    };
-  });
+//     return {
+//       logResistivity: logResistivityUpdate,
+//       thickness: thicknessUpdate,
+//       depth: prevLayer ? (thicknessUpdate + prevLayer.depth) : thicknessUpdate
+//     };
+//   });
 
-  // Log the model in linear domain for display
-  console.log(currentIterationModel.map(layer => ({
-    resistivity: Math.exp(layer.logResistivity),
-    thickness: layer.thickness,
-    depth: layer.depth
-  })));
+//   // Log the model in linear domain for display
+//   console.log(currentIterationModel.map(layer => ({
+//     resistivity: Math.exp(layer.logResistivity),
+//     thickness: layer.thickness,
+//     depth: layer.depth
+//   })));
   
-  const currentModelResponsevect = logDomainForwardOperator(currentIterationModel);
+//   const currentModelResponsevect = logDomainForwardOperator(currentIterationModel);
 
-  // Calculate improvement metrics
-  const currentModelResidualVect = resistGraph.differenceHandler(logResistivitiesVect, currentModelResponsevect);
-  const Δχ = evalChiSquaredError(currentModelResidualVect);
+//   // Calculate improvement metrics
+//   const currentModelResidualVect = resistGraph.differenceHandler(logResistivitiesVect, currentModelResponsevect);
+//   const Δχ = evalChiSquaredError(currentModelResidualVect);
 
-  const metricNumerator = resistGraph.differenceHandler(χ, Δχ);
-  const metricDenominator = resistGraph.productHandler(
-    resistGraph.getTranspose(pertubationVect),
-    resistGraph.sumHandler(
-      resistGraph.productHandler(dampingCoefficient, pertubationVect),
-      gFactor
-    )
-  );
+//   const metricNumerator = resistGraph.differenceHandler(χ, Δχ);
+//   const metricDenominator = resistGraph.productHandler(
+//     resistGraph.getTranspose(pertubationVect),
+//     resistGraph.sumHandler(
+//       resistGraph.productHandler(dampingCoefficient, pertubationVect),
+//       gFactor
+//     )
+//   );
 
-  const metric = metricNumerator / metricDenominator;
+//   const metric = metricNumerator / metricDenominator;
   
-  // Update damping parameter based on success of iteration
-  if(metric > 0) {
-    vFactor = 2;
-    nullMetricArr = [];
-    const metricDampingCoefficient = (1 - Math.pow(((2 * metric) - 1), 3));
-    nextDampingCoefficient = dampingCoefficient * Math.max(1/3, metricDampingCoefficient);
-  } else {
-    if(metric === 0) nullMetricArr.push(metric);
-    else nullMetricArr = [];
-    currentIterationModel = previousModel;
-    nextDampingCoefficient = dampingCoefficient * vFactor;
-    vFactor *= 2;   
-  }
+//   // Update damping parameter based on success of iteration
+//   if(metric > 0) {
+//     vFactor = 2;
+//     nullMetricArr = [];
+//     const metricDampingCoefficient = (1 - Math.pow(((2 * metric) - 1), 3));
+//     nextDampingCoefficient = dampingCoefficient * Math.max(1/3, metricDampingCoefficient);
+//   } else {
+//     if(metric === 0) nullMetricArr.push(metric);
+//     else nullMetricArr = [];
+//     currentIterationModel = previousModel;
+//     nextDampingCoefficient = dampingCoefficient * vFactor;
+//     vFactor *= 2;   
+//   }
 
-  // Stopping criteria
-  const coeffConvergencevect = pertubationVect.map((each, index) => {
-    return isNaN(each[0] / previousModelParamsVect[index][0]) ? 0 : each[0] / previousModelParamsVect[index][0]; 
-  });
-  const chiSquaredConvergence = χ / (resistivitiesNo - modelParamsNo);
+//   // Stopping criteria
+//   const coeffConvergencevect = pertubationVect.map((each, index) => {
+//     return isNaN(each[0] / previousModelParamsVect[index][0]) ? 0 : each[0] / previousModelParamsVect[index][0]; 
+//   });
+//   const chiSquaredConvergence = χ / (resistivitiesNo - modelParamsNo);
 
-  if(Math.abs(iterationMaxError) < maxError) {
-    console.log('first stopping criterion');
-    break;
-  } else if(Math.abs(Math.max(coeffConvergencevect)) < maxError) {
-    console.log("second stopping criterion");
-    break;
-  } else if(chiSquaredConvergence < maxError) {
-    console.log("third stopping criterion");
-    break;
-  }
+//   if(Math.abs(iterationMaxError) < maxError) {
+//     console.log('first stopping criterion');
+//     break;
+//   } else if(Math.abs(Math.max(coeffConvergencevect)) < maxError) {
+//     console.log("second stopping criterion");
+//     break;
+//   } else if(chiSquaredConvergence < maxError) {
+//     console.log("third stopping criterion");
+//     break;
+//   }
   
-  console.log(`χ: ${χ}`);
-  console.log(`Δχ: ${Δχ}`);
-  console.log(`metric: ${metric}`);
-  console.log(`dampingCoefficient: ${dampingCoefficient}`);
-  console.log(`metricNum: ${metricNumerator}`);
-  console.log(`metricDenum: ${metricDenominator}`);
+//   console.log(`χ: ${χ}`);
+//   console.log(`Δχ: ${Δχ}`);
+//   console.log(`metric: ${metric}`);
+//   console.log(`dampingCoefficient: ${dampingCoefficient}`);
+//   console.log(`metricNum: ${metricNumerator}`);
+//   console.log(`metricDenum: ${metricDenominator}`);
 
-  ++iterationCount;
+//   ++iterationCount;
   
-  // Update progress
-  const progress = inversionProgress + Math.round((iterationCount / ITERATION_LIMIT) * 100);
-  if(progress < 100) {
-    if(((progress % 2) === 0) && inversionProgress !== progress) {
-      inversionProgress = progress;
-      resistGraph.inversionProgressHandler(progress);
-    }
-  }
-}
+//   // Update progress
+//   const progress = inversionProgress + Math.round((iterationCount / ITERATION_LIMIT) * 100);
+//   if(progress < 100) {
+//     if(((progress % 2) === 0) && inversionProgress !== progress) {
+//       inversionProgress = progress;
+//       resistGraph.inversionProgressHandler(progress);
+//     }
+//   }
+// }
 
 // Convert final model back to linear domain for output
 const finalModel = currentIterationModel.map(layer => ({
