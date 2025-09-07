@@ -106,7 +106,7 @@ ipcRenderer.on('plot', (ev, measuredDataPoints)=>{
           .attr("transform", `translate(${margin.left},0)`)
           .call(d3.axisLeft(yScale).ticks(10,  ",.1s"));
         },
-        freeStyle: (width,height,measuredData,modeledData) =>{
+        plot: (width,height,measuredData,modeledData) =>{
             const x = d3.scaleLog([1,  d3.max(measuredData, d => d.x )], [20, width - 30]);
             const y = d3.scaleLog([d3.min(measuredData, d => d.y), d3.max(measuredData, d => d.y) + 50], [height - 21,10]);
             const svg = d3.select("svg");
