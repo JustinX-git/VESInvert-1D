@@ -2,6 +2,7 @@ const {gsap} = require('gsap');
 import { multiply, inv, flatten,mean,median, polynomialRoot,square,cube,add, subtract,trace,transpose,diag,identity,norm,matrixFromFunction,max,min, det,factorial} from 'mathjs';
 import Spline from 'cubic-spline';
 import * as d3 from "d3";
+import { sgg } from 'ml-savitzky-golay-generalized';
 
 const { ipcRenderer, contextBridge} = require('electron');
 
@@ -10,6 +11,9 @@ ipcRenderer.on('plot', (ev, measuredDataPoints)=>{
         measuredDataPoints,
         inversionProgressHandler : (progress) =>  ipcRenderer.send('progress',progress),
         getPlotly: () => require('plotly.js-dist'),
+        applySmoothing: (yData,xData, options) =>{
+            return sgg(yData,xData,options ?? {windowSize: 9,derivative: 0,polynomial: 3})
+        },
         getCubicInterpolations: (xs,ys, lastHalfSpacing) => {
             const spline =  new Spline(xs,ys)
             let n = 1, XmeasuredData = [], YmeasuredData = []; 
@@ -75,7 +79,7 @@ ipcRenderer.on('plot', (ev, measuredDataPoints)=>{
     });
 
     contextBridge.exposeInMainWorld('D3',{
-        plot: (width,height,measuredData,modeledData) =>{
+        plot: (width,height,measuredData,smoothenedData,modeledData) =>{
             const x = d3.scaleLog([1,  d3.max(measuredData, d => d.x )], [20, width - 30]);
             const y = d3.scaleLog([d3.min(measuredData, d => d.y), d3.max(measuredData, d => d.y) + 50], [height - 21,10]);
             const svg = d3.select("svg");
@@ -120,25 +124,42 @@ ipcRenderer.on('plot', (ev, measuredDataPoints)=>{
            console.log('measured sucessfully rendered')
            //Curve Draw Code
            const line =  d3.line(d => x(d.x),d => y(d.y)).curve(d3.curveNatural);
-           const path = svg.append("path")
+           const modelPath = svg.append("path")
            .datum(modeledData)
            .attr("d", line)
            .attr("fill", "none")
            .attr("stroke", "red")
-           .attr("stroke-width", 5);
+           .attr("stroke-width", 4);
 
-           console.log('model sucessfully rendered')
+        //    const smoothPath = svg.append("path")
+        //    .datum(smoothenedData)
+        //    .attr("d", line)
+        //    .attr("fill", "none")
+        //    .attr("stroke", "green")
+        //    .attr("stroke-width", 4);
            
-           const totalLength = path.node().getTotalLength();
-           const delay = 500 + ((measuredData.length - 1) * 10);
-           path
-           .attr("stroke-dasharray", totalLength)
-           .attr("stroke-dashoffset", totalLength)
+           const totalModelLength = modelPath.node().getTotalLength();
+           const delay = 600 + ((measuredData.length - 1) * 10);
+           modelPath
+           .attr("stroke-dasharray", totalModelLength)
+           .attr("stroke-dashoffset", totalModelLength)
            .transition()
            .duration(1200) 
            .delay(delay)
            .ease(d3.easePoly.exponent(2))
            .attr("stroke-dashoffset", 0);
+
+           console.log('model sucessfully rendered')
+
+        //    const totalSmoothLength = smoothPath.node().getTotalLength();
+        //    smoothPath
+        //    .attr("stroke-dasharray", totalSmoothLength)
+        //    .attr("stroke-dashoffset", totalSmoothLength)
+        //    .transition()
+        //    .duration(1200) 
+        //    .delay(delay)
+        //    .ease(d3.easePoly.exponent(2))
+        //    .attr("stroke-dashoffset", 0);
 
         },
         curveDraw: (measuredData,line,svg) =>{
