@@ -6,6 +6,7 @@ import { sgg } from 'ml-savitzky-golay-generalized';
 
 const { ipcRenderer, contextBridge} = require('electron');
 
+//To-do: Reveiew matrix storage format to boost efficiency.
 ipcRenderer.on('plot', (ev, measuredDataPoints)=>{
     contextBridge.exposeInMainWorld('resistGraph',{
         measuredDataPoints,
@@ -129,7 +130,7 @@ ipcRenderer.on('plot', (ev, measuredDataPoints)=>{
            .attr("d", line)
            .attr("fill", "none")
            .attr("stroke", "red")
-           .attr("stroke-width", 4);
+           .attr("stroke-width", 2);
 
         //    const smoothPath = svg.append("path")
         //    .datum(smoothenedData)
