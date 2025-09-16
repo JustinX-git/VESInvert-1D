@@ -1,5 +1,5 @@
-const distances =  resistGraph.measuredDataPoints.distances;
-const resistivities =  resistGraph.measuredDataPoints.resistivities;
+// const distances =  resistGraph.measuredDataPoints.distances;
+// const resistivities =  resistGraph.measuredDataPoints.resistivities;
 
 
 // Evaluating RRMSE(Relative Root Mean Square Error)
@@ -10,33 +10,6 @@ const evalRRMSE = (observedYs, modelResponseVect) => {
   });
   const RMSE = Math.sqrt(errorSquareSum / observedYs.length);
   return (RMSE * 100);
-}
-
-/**
- * Adds random noise to each element of a numerical array.
- *
- * @param {number[]} dataArray The input array of numbers to which noise will be added.
- * @param {number} noisePercentage The maximum percentage of noise to apply to each data point. For 5%, use 5.
- * @returns {number[]} A new array containing the data with the added random noise.
- */
-function addNoise(dataArray, noisePercentage) {
-  if (!Array.isArray(dataArray)) {
-    throw new Error("Invalid input: dataArray must be an array of numbers.");
-  }
-  const noiseFactor = noisePercentage / 100;
-  const noisyArray = dataArray.map(value => {
-    if (typeof value !== 'number') {
-      console.warn("Warning: Non-numeric value found in array, skipping.", value);
-      return value;
-    }
-
-    const randomMultiplier = (Math.random() - 0.5) * 2 + (Math.round(Math.random()) * Math.exp(noiseFactor));
-    const noise = randomMultiplier * noiseFactor * value;
-
-    return value + noise;
-  });
-
-  return noisyArray;
 }
 
 /* GENERAL SETTINGS */
@@ -55,6 +28,10 @@ const initialModel = [
 
 ];
 const modelParamsNo = initialModel.length
+
+const distances = [1, 1.4, 2, 3, 4,6, 8, 10, 14, 20,30, 40, 60, 80, 100,140, 200, 300, 400, 500];
+const resistivities = [373.3, 365.5, 405.6, 220, 141.3,120.4, 80.8, 72.7, 67.5, 68.1,46.6, 42.6, 44.8, 45.7, 43.1,43.1, 42.6, 36.9, 30.8, 17.5];
+
 
 
 //Field data transformation and analysis
@@ -291,7 +268,6 @@ if(execInversion){
     if (metric > 0) {
       vFactor = 2;
       const metricDampingCoefficient = (1 - Math.pow((β * (2 * metric) - 1), λ));
-      let multiplier = 1;
       nextDampingCoefficient = dampingCoefficient * Math.max(1 / τ, metricDampingCoefficient);
    
     } else {
@@ -338,8 +314,6 @@ const finalModel = currentIterationModel.map((layer) => {
 
 console.log("Final Inverted Model:", finalModel);
 console.timeEnd('LM Scheme - Full Log Domain');
-console.log("Final Inverted Model:", finalModel);
-console.timeEnd('LM Scheme - Full Log Domain');
 
  resistGraph.inversionProgressHandler(100);
 
@@ -354,7 +328,7 @@ console.log(inversionResistivities)
 const width = 800;
 const height = 400;
 
-const modelData = logInversionResistivities.map((response,index) => ({x:distances[index],y:Math.exp(response[0])}));
+const modelData = inversionResistivities.map((response,index) => ({x:distances[index],y:response}));
 const measuredData = resistivities.map((resistivity,index) => ({x:distances[index],y:resistivity}));
 
 
