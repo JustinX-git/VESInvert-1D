@@ -1,23 +1,24 @@
 {
-  "name": "winresist-v2",
+  "name": "vesinvert-1d",
   "version": "1.0.0",
-  "description": "A project aimed at refurbishing winresist v1",
+  "description": "An open source project that aims to provide a straightforward GUI for carrying out 1D VES inversions.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Ikwuegbu Uzochukwu",
+  "license": "MIT",
   "devDependencies": {
     "electron": "^30.0.2"
   },
   "dependencies": {
     "cubic-spline": "^3.0.3",
     "d3": "^7.9.0",
-    "gsap": "^3.12.5",
+    "gsap": "^3.13.0",
     "mathjs": "^13.0.3",
+    "ml-savitzky-golay-generalized": "^4.2.0",
     "plotly.js-dist": "^2.32.0",
     "read-excel-file": "^5.8.1"
   }

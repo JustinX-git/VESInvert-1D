@@ -2,14 +2,19 @@ const {gsap} = require('gsap');
 import { multiply, inv, flatten,mean,median, polynomialRoot,square,cube,add, subtract,trace,transpose,diag,identity,norm,matrixFromFunction,max,min, det,factorial} from 'mathjs';
 import Spline from 'cubic-spline';
 import * as d3 from "d3";
+import { sgg } from 'ml-savitzky-golay-generalized';
 
 const { ipcRenderer, contextBridge} = require('electron');
 
+//To-do: Reveiew matrix storage format to boost efficiency.
 ipcRenderer.on('plot', (ev, measuredDataPoints)=>{
     contextBridge.exposeInMainWorld('resistGraph',{
         measuredDataPoints,
         inversionProgressHandler : (progress) =>  ipcRenderer.send('progress',progress),
         getPlotly: () => require('plotly.js-dist'),
+        applySmoothing: (yData,xData, options) =>{
+            return sgg(yData,xData,options ?? {windowSize: 9,derivative: 0,polynomial: 3})
+        },
         getCubicInterpolations: (xs,ys, lastHalfSpacing) => {
             const spline =  new Spline(xs,ys)
             let n = 1, XmeasuredData = [], YmeasuredData = []; 
@@ -75,37 +80,6 @@ ipcRenderer.on('plot', (ev, measuredDataPoints)=>{
     });
 
     contextBridge.exposeInMainWorld('D3',{
-        logXScaleSetUp: (measuredData,margin,width) => d3.scaleLog([1, d3.max(measuredData, d => d.x )],[margin.left, width - margin.right]),
-        logYScaleSetUp: (measuredData,margin,height) => d3.scaleLog([1, d3.max(measuredData, d => d.y)],[height - margin.bottom, margin.top]),
-        lineSetUp: (x,y) => d3.line(x,y).curve(d3.curveNatural),
-        svgDraw: (measuredData, linemeasuredData,height,margin,xScale,yScale) => {
-            const svg = d3.select("svg");
-            const path = svg.append("path")
-           .datum(measuredData)
-           .attr("d", linemeasuredData)
-           .attr("fill", "none")
-           .attr("stroke", "steelblue")
-           .attr("stroke-width", 2);
-           
-           const totalLength = path.node().getTotalLength();
-           path
-           .attr("stroke-dasharray", totalLength)
-           .attr("stroke-dashoffset", totalLength)
-           .transition()
-           .duration(3000) 
-           .ease(d3.easeLinear)
-           .attr("stroke-dashoffset", 0);
-
-          // Add x-axis (logarithmic)
-           svg.append("g")
-          .attr("transform", `translate(0, ${height - margin.bottom})`)
-          .call(d3.axisBottom(xScale).ticks(10,  ",.1s"));
-
-          // Add y-axis (logarithmic)
-          svg.append("g")
-          .attr("transform", `translate(${margin.left},0)`)
-          .call(d3.axisLeft(yScale).ticks(10,  ",.1s"));
-        },
         plot: (width,height,measuredData,modeledData) =>{
             const x = d3.scaleLog([1,  d3.max(measuredData, d => d.x )], [20, width - 30]);
             const y = d3.scaleLog([d3.min(measuredData, d => d.y), d3.max(measuredData, d => d.y) + 50], [height - 21,10]);
@@ -151,45 +125,27 @@ ipcRenderer.on('plot', (ev, measuredDataPoints)=>{
            console.log('measured sucessfully rendered')
            //Curve Draw Code
            const line =  d3.line(d => x(d.x),d => y(d.y)).curve(d3.curveNatural);
-           const path = svg.append("path")
+           const modelPath = svg.append("path")
            .datum(modeledData)
            .attr("d", line)
            .attr("fill", "none")
            .attr("stroke", "red")
-           .attr("stroke-width", 5);
+           .attr("stroke-width", 2);
 
-           console.log('model sucessfully rendered')
            
-           const totalLength = path.node().getTotalLength();
-           const delay = 500 + ((measuredData.length - 1) * 10);
-           path
-           .attr("stroke-dasharray", totalLength)
-           .attr("stroke-dashoffset", totalLength)
+           const totalModelLength = modelPath.node().getTotalLength();
+           const delay = 600 + ((measuredData.length - 1) * 10);
+           modelPath
+           .attr("stroke-dasharray", totalModelLength)
+           .attr("stroke-dashoffset", totalModelLength)
            .transition()
            .duration(1200) 
            .delay(delay)
            .ease(d3.easePoly.exponent(2))
            .attr("stroke-dashoffset", 0);
 
-        },
-        curveDraw: (measuredData,line,svg) =>{
-            const path = svg.append("path")
-            .datum(measuredData)
-            .attr("d", line)
-            .attr("fill", "none")
-            .attr("stroke", "red")
-            .attr("stroke-width", 3);
-            
-            const totalLength = path.node().getTotalLength();
-            path
-            .attr("stroke-dasharray", totalLength)
-            .attr("stroke-dashoffset", totalLength)
-            .transition()
-            .duration(1500) 
-            .ease(d3.easeLinear)
-            .attr("stroke-dashoffset", 0);
+           console.log('model sucessfully rendered')
         }
-
         });
 
     contextBridge.exposeInMainWorld('gsapAnim',{
