@@ -1,6 +1,7 @@
 # 1D VES Inversion Tool (Electron.js)
 
 A desktop application for performing **1D Vertical Electrical Sounding (VES)** inversions using field-acquired resistivity data. Built with [Electron.js](https://www.electronjs.org/), this tool allows geophysicists and researchers to model subsurface structures based on the **Schlumberger array configuration**.
+When benchmarked against six synthetic datasets, VESInvert-1D performed roughly 40% better than WINRESIST v1.0 in terms of inverted model closeness to the true model. A google sheet hosting the benchmark results can be found [here](https://docs.google.com/spreadsheets/d/1GtQ8EsxtLx-INExzfGG5IUWyZ2pOrS-6kT4IqcEP9MI/edit?usp=sharing). It should be noted that Resistivity-Depth plots are yet to be implemented.
 
 ---
 
